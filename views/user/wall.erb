@@ -1,0 +1,84 @@
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <title>Social Network</title>
+        <link rel="stylesheet" type="text/css" href="/public/style.css">
+        <link rel="stylesheet" type="text/css" href="/public/css/semantic.css">
+    </head>
+    <body>
+        <!-- TOP MENU -->
+        <div class="ui red inverted menu">
+            <a class="item" href="/index"><i class="home icon"></i> <%=user.name%>'s wall</a>
+            <a class="item" href="/news"><i class="grid layout icon"></i> News</a>
+            <a class="item" href="/friends"><i class="users icon"></i> My friends</a>
+            <a class="item"><i class="setting icon"></i> Profil</a>
+            <div class="right menu">
+                <div class="item">
+                    <div class="ui icon input">
+                        <form action="user/search" method="GET">
+                            <input type="text" name="user_search" placeholder="Search users...">
+                        </form>
+                        <i class="search icon"></i>
+                    </div>
+                </div>
+                <a class="ui item" href="/user/logout"><i class="off icon"></i> Logout</a>
+            </div>
+        </div>
+        <!-- END TOP MENU -->
+
+        <div class="ui one column page grid">
+            <div class="column">
+
+                <!-- PROFIL HEADER -->
+                <div class="ui segment">
+                    <!-- <img class="circular ui image" src="/images/demo/photo2.jpg"> -->
+                    <h1> <%=friend.name%></h1>
+                </div>
+                <!-- PROFIL HEADER -->
+
+                <div class="ui segment">
+                <!-- CREATE NEW POST FORM -->
+                <div class="ui form">
+                    <form action="/post/create" method="POST"> 
+                    
+                      <div class="field">
+                        <label>New post</label>
+                        <textarea name="message"></textarea>
+                      </div>
+                      <input class="ui submit button" type="submit" value="Submit">
+                    </form>
+                </div>
+                <!-- END CREATE NEW POST FORM -->
+                <!-- LIST OF POST -->
+                <div class="ui piled feed segment">
+                      <h2 class="ui header">
+                        Recent Activity
+                      </h2>
+                      
+                      <% posts.each do |post|%>
+                      <div class="event">
+                        <div class="label">
+                          <i class="circular pencil icon"></i>
+                        </div>
+                        <div class="content">
+                          <div class="date">
+                            <%=post.pretty_date%>
+                          </div>
+                          <div class="summary">
+                            <%=post.author_name%> wrote a post
+                          </div>
+                          <div class="extra text">
+                            <%=post.message%>
+                          </div>
+                        </div>
+                      </div>
+                      <% end %>
+                  
+                </div>
+                <!-- END LIST OF POST -->
+            </div>
+            </div>
+        </div>
+
+    </body>
+    </html>

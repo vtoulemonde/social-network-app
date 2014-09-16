@@ -1,0 +1,49 @@
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <title>Social Network</title>
+        <link rel="stylesheet" type="text/css" href="/public/style.css">
+        <link rel="stylesheet" type="text/css" href="/public/css/semantic.css">
+
+    </head>
+    <body>
+        <!-- TOP MENU -->
+        <div class="ui red inverted menu">
+            <a class="active item"><i class="home icon"></i> Log-In</a>
+            <a class="item" href="/user/new"><i class="user icon"></i> Register</a>
+        </div>
+        <!-- END TOP MENU -->
+        <div class="container">
+        <div class="ui error form segment">
+            <h3 class="ui header">Log-In</h3>
+                       
+            <%if errors && !errors.empty? %>
+            <div class="ui error message">
+                <div class="header">Impossible to connect</div>
+                <% errors.each do |error| %>
+                <p><%=error%></p>
+                <% end %>
+            </div>
+            <% end %>
+            <form action="login" method="POST"> 
+                <div class="field">
+                    <label>Email</label>
+                    <div class="ui left labeled icon input">
+                      <input type="text" name="email" placeholder="Email">
+                      <i class="mail icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Password</label>
+                    <div class="ui left labeled icon input">
+                      <input type="password" name="password">
+                      <i class="lock icon"></i>
+                    </div>
+                </div>
+                <input class="ui submit button" type="submit" value="Submit">
+                <a class="ui submit button" href="/">Cancel</a>
+            </form>
+        </div>
+    </div>
+    </body>
+    </html>
