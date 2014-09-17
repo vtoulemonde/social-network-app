@@ -8,10 +8,12 @@
     <body>
         <!-- TOP MENU -->
         <div class="ui red inverted menu">
-            <a class="item" href="/index"><i class="home icon"></i> <%=user.name%>'s wall</a>
+            <a class="active item" href="/index"><i class="home icon"></i> <%=user.name%>'s wall</a>
             <a class="item" href="/news"><i class="grid layout icon"></i> News</a>
             <a class="item" href="/friends"><i class="users icon"></i> My friends</a>
-            <a class="item"><i class="setting icon"></i> Profil</a>
+            <a class="item" href="/user/show"><i class="setting icon"></i> Profil</a>
+            <a class="item" href="/external_news"><i class="grid layout icon"></i> Articles</a>
+            
             <div class="right menu">
                 <div class="item">
                     <div class="ui icon input">
@@ -32,14 +34,16 @@
                 <!-- PROFIL HEADER -->
                 <div class="ui segment">
                     <!-- <img class="circular ui image" src="/images/demo/photo2.jpg"> -->
-                    <h1> <%=friend.name%></h1>
+                    <img class="ui circular small floated image" src="/public/images/profil/<%=user.photo%>">
+                    
+                    <h1> <%=user.name%></h1>
                 </div>
                 <!-- PROFIL HEADER -->
 
                 <div class="ui segment">
                 <!-- CREATE NEW POST FORM -->
                 <div class="ui form">
-                    <form action="/post/create" method="POST"> 
+                    <form action="post/create" method="POST"> 
                     
                       <div class="field">
                         <label>New post</label>

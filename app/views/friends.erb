@@ -11,7 +11,8 @@
             <a class="item" href="/index"><i class="home icon"></i> <%=user.name%>'s wall</a>
             <a class="item" href="/news"><i class="grid layout icon"></i> News</a>
             <a class="active item" href="/friends"><i class="users icon"></i> My friends</a>
-            <a class="item"><i class="setting icon"></i> Profil</a>
+            <a class="item" href="/user/show"><i class="setting icon"></i> Profil</a>
+            <a class="item" href="/external_news"><i class="grid layout icon"></i> Articles</a>
             <div class="right menu">
                 <div class="item">
                     <div class="ui icon input">
@@ -30,7 +31,7 @@
             <div class="column">
                 <!-- PROFIL HEADER -->
                 <div class="ui segment">
-                    <!-- <img class="circular ui image" src="/images/demo/photo2.jpg"> -->
+                    <img class="ui circular small floated image" src="/public/images/profil/<%=user.photo%>">
                     <h1> <%=user.name%></h1>
                 </div>
                 <!-- PROFIL HEADER -->
@@ -43,6 +44,7 @@
         			<% user.friends.each do |friend| %>
         			<div class="item">
         				<!-- <img class="ui avatar image" src="/images/demo/avatar2.jpg"> -->
+                        <img class="ui avatar image" src="/public/images/profil/<%=friend.photo%>">
         				<div class="content">
         					<div class="header"><a href="/user/wall?id=<%=friend.id%>"><%=friend.name%></a></div>
         				</div>

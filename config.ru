@@ -1,5 +1,5 @@
 require 'rack'
-require_relative 'main'
+require_relative 'app/main'
 
 
 app = App.new

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Social Network</title>
+    <link rel="stylesheet" type="text/css" href="/public/style.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/semantic.css">
+
+</head>
+<body>
+    <!-- TOP MENU -->
+    <div class="ui red inverted menu">
+        <a class="item" href="/index"><i class="home icon"></i> <%=user.name%>'s wall</a>
+        <a class="item" href="/news"><i class="grid layout icon"></i> News</a>
+        <a class="item" href="/friends"><i class="users icon"></i> My friends</a>
+        <a class="active item" href="/user/show"><i class="setting icon"></i> Profil</a>
+        <a class="item" href="/external_news"><i class="grid layout icon"></i> Articles</a>
+        
+        <div class="right menu">
+            <div class="item">
+                <div class="ui icon input">
+                    <form action="user/search" method="GET">
+                        <input type="text" name="user_search" placeholder="Search users...">
+                    </form>
+                    <i class="search icon"></i>
+                </div>
+            </div>
+            <a class="ui item" href="/user/logout"><i class="off icon"></i> Logout</a>
+        </div>
+    </div>
+    <!-- END TOP MENU -->
+
+    <div class="ui one column page grid">
+    <div class="column">
+
+        <div class="ui error form segment">
+            <h3 class="ui header">Edit profil</h3>
+                       
+            <%if errors && !errors.empty? %>
+            <div class="ui error message">
+                <div class="header">Impossible to update profil</div>
+                <% errors.each do |error| %>
+                <p><%=error%></p>
+                <% end %>
+            </div>
+            <% end %>
+            <form action="update" method="POST"> 
+                <div class="field">
+                    <label>Name</label>
+                    <div class="ui left labeled icon input">
+                      <input type="text" name="name" placeholder="Name" value="<%=user.name%>">
+                      <i class="user icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <div class="ui left labeled icon input">
+                      <input type="text" name="email" placeholder="Email" value="<%=user.email%>">
+                      <i class="mail icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Photo path</label>
+                    <!-- <div class="ui left labeled icon input">
+                      <input type="file" name="photo">
+                    </div> -->
+                    <div class="ui left labeled icon input">
+                      <input type="text" name="photo_path">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>New password</label>
+                    <div class="ui left labeled icon input">
+                      <input type="password" name="new_password">
+                      <i class="lock icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Confirm new password</label>
+                    <div class="ui left labeled icon input">
+                      <input type="password" name="new_password_confirm">
+                      <i class="lock icon"></i>
+                    </div>
+                </div>
+                <input class="ui submit button" type="submit" value="Update">
+                <a class="ui submit button" href="/user/show">Cancel</a>
+            </form>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
