@@ -9,6 +9,7 @@ require 'fileutils'
 require_relative 'models/user'
 require_relative 'models/post'
 require_relative 'models/orm'
+require_relative 'models/comment'
 
 
 class App
@@ -30,6 +31,7 @@ class App
         end
 
         user_login = @orm.get_user_by_id(request.session['user_id']) if request.session['user_id']
+        @orm.load_friends(user_login) if user_login
 
         case request.path_info
         when '/', "/index"
@@ -109,7 +111,21 @@ class App
             end
 
         when '/external_news'
-            response.write render('external_news', {"user"=> user_login,"articles" =>get_external_news})
+            articles = get_external_news(request)
+            request.session["articles"] = articles
+            response.write render('external_news', {"user"=> user_login,"articles" => articles, "subject"=>request.GET['subject']})
+        
+        when '/add_article'
+            @orm.create_post(user_login.id, request.POST["article"], user_login.id)
+            response.redirect '/index'
+
+        when '/comment/create'
+            @orm.create_comment(request.POST['post_id'], request.POST['message'], user_login.id)
+            response.redirect '/index'
+
+        when '/post/delete'
+            @orm.delete_post(request.GET['post_id'])
+            response.redirect '/index'
         end
     
         response.finish
@@ -185,13 +201,19 @@ class App
         Erubis::Eruby.new(file).result(locals)
     end
 
-    def get_external_news
+    def get_external_news(request)
         result = []
         url = "http://api.feedzilla.com/v1/articles/search.json?count=10"
+        if request.GET['subject']
+            url +="&q=#{request.GET['subject']}"
+        end
         response = Typhoeus.get(url)
         data = JSON.parse response.body
-        ap data["articles"]
-        data["articles"]
+        # ap data["articles"]
+        data["articles"].each do |article|
+            article["url"] = article["url"].split("?")[0]
+            article["publish_date"] = article["publish_date"].split("+")[0]
+        end
     end
 
 end

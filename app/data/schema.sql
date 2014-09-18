@@ -20,3 +20,11 @@ CREATE TABLE friends (
   user_id_2 INTEGER REFERENCES users(id) NOT NULL,
   status INT
 );
+
+CREATE TABLE comments (
+  id INTEGER PRIMARY KEY,
+  post_id INTEGER REFERENCES posts(id),
+  content TEXT NOT NULL, 
+  author_id INTEGER REFERENCES users(id),
+  date TEXT NOT NULL
+);

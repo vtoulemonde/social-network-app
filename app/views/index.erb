@@ -12,7 +12,7 @@
             <a class="item" href="/news"><i class="grid layout icon"></i> News</a>
             <a class="item" href="/friends"><i class="users icon"></i> My friends</a>
             <a class="item" href="/user/show"><i class="setting icon"></i> Profil</a>
-            <a class="item" href="/external_news"><i class="grid layout icon"></i> Articles</a>
+            <a class="item" href="/external_news"><i class="globe icon"></i> Articles</a>
             
             <div class="right menu">
                 <div class="item">
@@ -28,14 +28,41 @@
         </div>
         <!-- END TOP MENU -->
 
-        <div class="ui one column page grid">
-            <div class="column">
+        <div class="ui grid">
+
+          <!-- LEFT MENU -->
+            <div class="four wide column">
+
+              <div class="ui vertical menu">
+                <div class="header item">
+                    <img class="ui avatar floated image" src="/public/images/profil/<%=user.photo%>">
+                    <a href="/index"><%=user.name%></a>
+                </div>
+                <a class=" active item" href="/index"><i class="home icon"></i> My wall</a>
+                <a class="item" href="/news"><i class="grid layout icon"></i> All news</a>
+                <a class="item" href="/user/show"><i class="setting icon"></i> Profil</a>
+              
+              <div class="header item">
+                <i class="users icon"></i>
+                Friends
+                 <div class="ui label"><%=user.friends.count%></div>
+              </div>
+              <% user.friends.each do |friend| %>
+              <div class="item">
+                <img class="ui avatar image" src="/public/images/profil/<%=friend.photo%>">
+                <a href="/user/wall?id=<%=friend.id%>"><%=friend.name%></a>
+              </div>
+              <% end %>
+            </div>
+            </div>
+            <!-- END LEFT MENU -->
+
+            <!-- CONTENT PAGE -->
+            <div class="column eleven wide">
 
                 <!-- PROFIL HEADER -->
                 <div class="ui segment">
-                    <!-- <img class="circular ui image" src="/images/demo/photo2.jpg"> -->
                     <img class="ui circular small floated image" src="/public/images/profil/<%=user.photo%>">
-                    
                     <h1> <%=user.name%></h1>
                 </div>
                 <!-- PROFIL HEADER -->
@@ -45,42 +72,77 @@
                 <div class="ui form">
                     <form action="post/create" method="POST"> 
                       <div class="field">
-                        <label>New post</label>
                         <input type="text" name="message" placeholder="New Post">
                       </div>
                       <input class="ui submit button" type="submit" value="Post">
                     </form>
                 </div>
                 <!-- END CREATE NEW POST FORM -->
-                <!-- LIST OF POST -->
-                <div class="ui piled feed segment">
-                      <h2 class="ui header">
-                        Recent Activity
-                      </h2>
-                      
+
+                <!-- LIST OF POST WITH COMMENTS -->
+                <div class="ui segment">
+                    <h2 class="ui header">
+                      Recent Activity
+                    </h2>
+                    <div class="ui threaded comments">
                       <% posts.each do |post|%>
-                      <div class="event">
-                        <div class="label">
-                          <i class="circular pencil icon"></i>
+
+                    <div class="comment">
+                      <a class="avatar">
+                        <img src="/public/images/profil/<%=post.photo%>">
+                      </a>
+                      <div class="content">
+                        <a class="author" href="/user/wall?id=<%=post.author_id%>"><%=post.author_name%></a>
+                        <div class="metadata">
+                          <span class="date"><%=post.pretty_date%></span>
                         </div>
-                        <div class="content">
-                          <div class="date">
-                            <%=post.pretty_date%>
-                          </div>
-                          <div class="summary">
-                            <%=post.author_name%> wrote a post
-                          </div>
-                          <div class="extra text">
-                            <%=post.message%>
-                          </div>
+                        <div class="text"><%=post.message%></div>
+                        <% if post.author_id == user.id %>
+                        <div class="actions">
+                          <a class="delete" href="/post/delete?post_id=<%=post.id%>">Delete</a>
                         </div>
+                        <% end %>
                       </div>
-                      <% end %>
-                  
+                      <div class="comments">
+                         <% post.comments.each do |comment|%>
+                        <div class="comment">
+                          <a class="avatar">
+                            <img class="ui avatar mini image" src="/public/images/profil/<%=comment.author_photo%>">
+                          </a>
+                          <div class="content">
+                            <a class="author" href="/user/wall?id=<%=comment.author_id%>"><%=comment.author_name%></a>
+                            <div class="metadata">
+                              <span class="date"><%=comment.pretty_date%></span>
+                            </div>
+                            <div class="text"><%=comment.content%></div>
+                            <!-- <div class="actions">
+                              <a class="delete" href="comment/delete?comment_id=<%=comment.id%>">Delete</a>
+                            </div> -->
+                          </div>
+                        </div>
+                        <% end %>
+
+                        <!-- CREATE NEW COMMENT FORM -->
+                        <div class="ui reply form">
+                            <form action="comment/create" method="POST"> 
+                              <div class="field">
+                                <input type="hidden" name="post_id" value="<%=post.id%>">
+                                <input type="text" name="message" placeholder="Write a comment...">
+                              </div>
+                            </form>
+                        </div>
+                        <!-- END CREATE NEW COMMENT FORM -->
+                      </div>
+                    </div>
+                    <%end%>
+                  </div>
                 </div>
-                <!-- END LIST OF POST -->
+                <!-- END LIST OF POST WITH COMMENTS -->
+
             </div>
             </div>
+            <div class="column one wide"></div>
+            <!-- END CONTENT PAGE -->
         </div>
 
     </body>

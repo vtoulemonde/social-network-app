@@ -1,22 +1,19 @@
-class Post
+class Comment
 
-	attr_reader :id, :message, :date, :author_name, :author_id, :user_name, :user_id, :photo
-	attr_accessor :comments
+	attr_reader :id, :content, :date, :author_name, :author_id, :author_name, :author_photo
 
 	def initialize(hash)
 		@id = hash["id"]
-		@message = hash["content"]
-		@user_id = hash["user_id"]
-		@user_name = hash["user_name"]
+		@content = hash["content"]
+		@post_id = hash["post_id"]
+		@date = DateTime.iso8601(hash["date"])
 		@author_id = hash["author_id"]
 		@author_name = hash["name"]
-		@photo = hash["photo"]
-		@date = DateTime.iso8601(hash["date"])
-		@comments=[]
+		@author_photo = hash["photo"]
 	end
 
 	def pretty_date
-		# @date.strftime("%b %d, %Y at %l:%M%p") if @date != nil
+		# @date.strftime("%B %d, %Y at %l:%M%p") if @date != nil
 		a = (DateTime.now.to_time - @date.to_time).to_i
 
 	    case a

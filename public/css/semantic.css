@@ -112,6 +112,15 @@
   color: #555555;
   font-size: 0.875em;
 }
+
+/* links */
+a {
+  color: #009FDA;
+  text-decoration: none;
+}
+a:hover {
+  color: #00BAFF;
+}
 /*--------------------
     Standard Inputs
 ---------------------*/
