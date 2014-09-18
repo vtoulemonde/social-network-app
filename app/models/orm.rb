@@ -20,7 +20,7 @@ class ORM
 	SQL_SELECT_COMMENTS = "SELECT comments.id,comments.post_id, comments.content, comments.author_id, comments.date, users.name, users.photo FROM comments INNER JOIN users ON users.id = comments.author_id WHERE post_id = ?;"
 	SQL_INSERT_COMMENT = "INSERT INTO comments (post_id, content, author_id, date) VALUES (?, ?, ?, ?);"
 	SQL_DELETE_POST = "DELETE FROM posts WHERE id=?;"
-
+	SQL_DELETE_POST_COMMENTS = "DELETE FROM comments WHERE post_id = ?;"
 
 	def initialize(db_path = "app/data/social.db")
 		@db = SQLite3::Database.new(db_path)
@@ -156,6 +156,7 @@ class ORM
 	end
 
 	def delete_post(id)
+		@db.execute SQL_DELETE_POST_COMMENTS, [id]
 		@db.execute SQL_DELETE_POST, [id]
 	end
 

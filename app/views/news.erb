@@ -43,8 +43,8 @@
               
               <div class="header item">
                 <i class="users icon"></i>
-                Friends
-                 <div class="ui label"><%=user.friends.count%></div>
+                <a href="/friends">Friends</a>
+                <div class="ui label"><%=user.friends.count%></div>
               </div>
               <% user.friends.each do |friend| %>
               <div class="item">

@@ -29,8 +29,38 @@
     </div>
     <!-- END TOP MENU -->
 
-    <div class="ui one column page grid">
-        <div class="column">
+    <div class="ui grid">
+
+      <!-- LEFT MENU -->
+        <div class="four wide column">
+
+          <div class="ui vertical menu">
+            <div class="header item">
+                <img class="ui avatar floated image" src="/public/images/profil/<%=user.photo%>">
+                <a href="/index"><%=user.name%></a>
+            </div>
+            <a class=" item" href="/index"><i class="home icon"></i> My wall</a>
+            <a class="item" href="/news"><i class="grid layout icon"></i> All news</a>
+            <a class="active item" href="/user/show"><i class="setting icon"></i> Profil</a>
+          
+          <div class="header item">
+            <i class="users icon"></i>
+            <a href="/friends">Friends</a>
+            <div class="ui label"><%=user.friends.count%></div>
+          </div>
+          <% user.friends.each do |friend| %>
+          <div class="item">
+            <img class="ui avatar image" src="/public/images/profil/<%=friend.photo%>">
+            <a href="/user/wall?id=<%=friend.id%>"><%=friend.name%></a>
+          </div>
+          <% end %>
+        </div>
+        </div>
+        <!-- END LEFT MENU -->
+
+        <!-- CONTENT PAGE -->
+        <div class="column eleven wide">
+
             <div class="ui error form segment">
                 <h3 class="ui header">Your profil</h3>
                 <img class="ui small rounded floated image" src="/public/images/profil/<%=user.photo%>">

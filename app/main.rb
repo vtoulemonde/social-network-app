@@ -62,7 +62,8 @@ class App
 
         when '/user/wall'
             user_wall = @orm.get_user_by_id(request.GET["id"])
-            response.write render('user/wall', {"user"=> user_login, "friend" =>user_wall, "posts" =>@orm.get_user_posts(user_wall.id)})
+            posts = @orm.get_user_posts(user_wall.id)
+            response.write render('user/wall', {"user"=> user_login, "friend" =>user_wall, "posts" =>posts})
 
         when '/news'
             response.write render('news', {"user"=> user_login, "posts" =>@orm.get_all_posts(user_login)})
@@ -121,11 +122,19 @@ class App
 
         when '/comment/create'
             @orm.create_comment(request.POST['post_id'], request.POST['message'], user_login.id)
-            response.redirect '/index'
+            if request.POST['wall_id']
+                response.redirect "/user/wall?id=#{request.POST['wall_id']}"
+            else
+                response.redirect '/index'
+            end
 
         when '/post/delete'
             @orm.delete_post(request.GET['post_id'])
-            response.redirect '/index'
+            if request.GET['wall_id']
+                response.redirect "/user/wall?id=#{request.GET['wall_id']}"
+            else
+                response.redirect '/index'
+            end
         end
     
         response.finish

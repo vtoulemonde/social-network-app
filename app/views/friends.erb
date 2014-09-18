@@ -27,8 +27,38 @@
         </div>
         <!-- END TOP MENU -->
 
-        <div class="ui one column page grid">
-            <div class="column">
+        <div class="ui grid">
+
+          <!-- LEFT MENU -->
+            <div class="four wide column">
+
+              <div class="ui vertical menu">
+                <div class="header item">
+                    <img class="ui avatar floated image" src="/public/images/profil/<%=user.photo%>">
+                    <a href="/index"><%=user.name%></a>
+                </div>
+                <a class="item" href="/index"><i class="home icon"></i> My wall</a>
+                <a class="item" href="/news"><i class="grid layout icon"></i> All news</a>
+                <a class="item" href="/user/show"><i class="setting icon"></i> Profil</a>
+              
+              <div class="header item">
+                <i class="users icon"></i>
+                <a href="/friends">Friends</a>
+                <div class="ui label"><%=user.friends.count%></div>
+              </div>
+              <% user.friends.each do |friend| %>
+              <div class="item">
+                <img class="ui avatar image" src="/public/images/profil/<%=friend.photo%>">
+                <a href="/user/wall?id=<%=friend.id%>"><%=friend.name%></a>
+              </div>
+              <% end %>
+            </div>
+            </div>
+            <!-- END LEFT MENU -->
+
+            <!-- CONTENT PAGE -->
+            <div class="column eleven wide">
+
                 <!-- PROFIL HEADER -->
                 <div class="ui segment">
                     <img class="ui circular small floated image" src="/public/images/profil/<%=user.photo%>">
@@ -37,22 +67,21 @@
                 <!-- PROFIL HEADER -->
 
                 <div class="ui segment">
-                <!-- LIST OF USERS -->
-                <h3 class="ui header">All friends</h3>
+                    <!-- LIST OF USERS -->
+                    <h3 class="ui header">My friends</h3>
 
-        		<div class="ui divided list">
-        			<% user.friends.each do |friend| %>
-        			<div class="item">
-        				<!-- <img class="ui avatar image" src="/images/demo/avatar2.jpg"> -->
-                        <img class="ui avatar image" src="/public/images/profil/<%=friend.photo%>">
-        				<div class="content">
-        					<div class="header"><a href="/user/wall?id=<%=friend.id%>"><%=friend.name%></a></div>
-        				</div>
-        			</div>
-        			<% end %>
-        		</div>
-                <!-- END LIST OF USERS -->
-            </div>
+            		<div class="ui divided list">
+            			<% user.friends.each do |friend| %>
+            			<div class="item">
+            				<img class="ui avatar image" src="/public/images/profil/<%=friend.photo%>">
+            				<div class="content">
+            					<div class="header"><a href="/user/wall?id=<%=friend.id%>"><%=friend.name%></a></div>
+            				</div>
+            			</div>
+            			<% end %>
+            		</div>
+                    <!-- END LIST OF USERS -->
+                </div>
             </div>
         </div>
 
