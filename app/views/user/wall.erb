@@ -42,7 +42,7 @@
                 <!-- CREATE NEW POST FORM -->
                 <div class="ui form">
                     <form action="/post/create" method="POST"> 
-                    
+                    <input type="hidden" name="wall_id" value="<%=friend.id%>">
                       <div class="field">
                         <label>New post</label>
                         <textarea name="message"></textarea>

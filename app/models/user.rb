@@ -4,7 +4,6 @@ class User
 	attr_accessor :friends, :name, :email, :photo
 
 	def initialize(hash)
-		ap hash
 		@id = hash["id"]
 		@name = hash["name"]
 		@email = hash["email"]

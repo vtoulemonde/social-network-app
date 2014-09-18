@@ -1,6 +1,6 @@
 class Post
 
-	attr_reader :id, :message, :date, :author_name, :author_id, :user_name, :user_id
+	attr_reader :id, :message, :date, :author_name, :author_id, :user_name, :user_id, :photo
 
 	def initialize(hash)
 		@id = hash["id"]
@@ -9,6 +9,7 @@ class Post
 		@user_name = hash["user_name"]
 		@author_id = hash["author_id"]
 		@author_name = hash["name"]
+		@photo = hash["photo"]
 		@date = DateTime.iso8601(hash["date"])
 	end
 

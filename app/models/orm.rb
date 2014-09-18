@@ -14,11 +14,11 @@ class ORM
 	SQL_SELECT_USER_POSTS = "SELECT * FROM posts INNER JOIN users ON users.id = posts.author_id WHERE user_id = ? ORDER BY date DESC;"
 	SQL_SELECT_POST_BY_ID = "SELECT * FROM posts INNER JOIN users ON users.id = posts.author_id WHERE posts.ID = ?;"
 	SQL_SELECT_FRIENDS_POST = "SELECT * FROM posts WHERE posts.user_id in (?) ORDER BY date DESC;"
-	SQL_UPDATE_USER = "UPDATE users SET name = ?, email = ? WHERE id =?;"
+	SQL_UPDATE_USER = "UPDATE users SET name = ?, email = ?, photo= ? WHERE id =?;"
 	SQL_UPDATE_PASSWORD = "UPDATE users SET password = ? WHERE id =?;"
+	SQL_SELECT_ALL_USERS = "SELECT * FROM users;"
 
 	def initialize(db_path = "app/data/social.db")
-		puts db_path
 		@db = SQLite3::Database.new(db_path)
 		@db.execute 'PRAGMA foreign_keys = true;'
 		@db.results_as_hash = true
@@ -26,13 +26,11 @@ class ORM
 
 	def user_email_exist?(email)
 		result = @db.get_first_value SQL_USER_EMAIL_EXIST, [email]
-		puts "user_email_exist = #{result}"
 		return result.to_i > 0
 	end
 
 	def user_name_exist?(name)
 		result = @db.get_first_value SQL_USER_NAME_EXIST, [name]
-		puts "user_name_exist = #{result}"
 		return result.to_i > 0
 	end
 
@@ -49,7 +47,6 @@ class ORM
 
 	def get_user_by_id(id)
 		row = @db.get_first_row SQL_GET_USER_BY_ID, [id]
-		puts row
 		return nil if row == nil
 		User.new row
 	end
@@ -57,6 +54,13 @@ class ORM
 	def find_users(criteria)
 		sql_request = "SELECT * FROM users WHERE name LIKE '%#{criteria}%' or email = ?;"
 		results = @db.execute sql_request, [criteria]
+		results.map do |row|
+			User.new row
+		end
+	end
+
+	def find_all_users
+		results = @db.execute SQL_SELECT_ALL_USERS
 		results.map do |row|
 			User.new row
 		end
@@ -92,7 +96,8 @@ class ORM
 		end
 	end
 
-	def get_news(user)
+	def get_all_posts(user)
+		load_friends(user)
 		ids_str = ""
 		user.friends.each do |friend|
 			ids_str += "#{friend.id}, "
@@ -104,12 +109,12 @@ class ORM
 								posts.author_id, 
 								posts.date, 
 								author.name as name,
+								author.photo as photo,
 								user_wall.name as user_name
 							FROM posts 
 							INNER JOIN users as author ON author.id = posts.author_id 
 							INNER JOIN users as user_wall ON user_wall.id = posts.user_id 
 							WHERE posts.user_id in (#{ids_str}) ORDER BY date DESC;"
-		puts sql_request
 		results = @db.execute sql_request
 		results.map do |row|
 			Post.new row
@@ -118,7 +123,7 @@ class ORM
 	end
 
 	def update_user(user)
-		@db.execute SQL_UPDATE_USER, [user.name, user.email, user.id]
+		@db.execute SQL_UPDATE_USER, [user.name, user.email, user.photo, user.id]
 	end
 
 	def update_password(user, password)

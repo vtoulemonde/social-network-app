@@ -30,7 +30,6 @@
     <div class="ui one column page grid">
         <div class="column">
 
-            <div class="ui segment">
             <!-- LIST OF POST -->
             <div class="ui piled feed segment">
                   <h2 class="ui header">
@@ -40,7 +39,8 @@
                   <% posts.each do |post|%>
                   <div class="event">
                     <div class="label">
-                      <i class="circular pencil icon"></i>
+                      <img class="ui circular small floated image" src="/public/images/profil/<%=post.photo%>">
+                      <!-- <i class="circular pencil icon"></i> -->
                     </div>
                     <div class="content">
                       <div class="date">
@@ -58,7 +58,6 @@
               
             </div>
             <!-- END LIST OF POST -->
-        </div>
         </div>
     </div>
 

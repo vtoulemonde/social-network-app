@@ -43,7 +43,7 @@
                 <% end %>
             </div>
             <% end %>
-            <form action="update" method="POST"> 
+            <form action="update" enctype="multipart/form-data" method="POST" > 
                 <div class="field">
                     <label>Name</label>
                     <div class="ui left labeled icon input">
@@ -59,12 +59,9 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label>Photo path</label>
-                    <!-- <div class="ui left labeled icon input">
-                      <input type="file" name="photo">
-                    </div> -->
+                    <label>Photo</label>
                     <div class="ui left labeled icon input">
-                      <input type="text" name="photo_path">
+                      <input type="file" name="photo">
                     </div>
                 </div>
                 <div class="field">
