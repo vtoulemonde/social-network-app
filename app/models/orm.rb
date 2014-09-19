@@ -8,16 +8,16 @@ class ORM
 	SQL_USER_EMAIL_EXIST = "SELECT count(*) FROM users WHERE email = ?;"
 	SQL_USER_NAME_EXIST = "SELECT count(*) FROM users WHERE name = ?;"
 	SQL_ADD_FRIEND = "INSERT INTO friends (user_id_1, user_id_2, status) VALUES (?, ?, ?);"
-	SQL_SELECT_FRIENDS1 = "SELECT users.id, users.name, users.email, users.photo FROM users INNER JOIN friends ON friends.user_id_1 = users.id WHERE friends.user_id_2 = ?;"
-	SQL_SELECT_FRIENDS2 = "SELECT users.id, users.name, users.email, users.photo FROM users INNER JOIN friends ON friends.user_id_2 = users.id WHERE friends.user_id_1 = ?;"
+	SQL_SELECT_FRIENDS1 = "SELECT users.* FROM users INNER JOIN friends ON friends.user_id_1 = users.id WHERE friends.user_id_2 = ?;"
+	SQL_SELECT_FRIENDS2 = "SELECT users.* FROM users INNER JOIN friends ON friends.user_id_2 = users.id WHERE friends.user_id_1 = ?;"
 	SQL_INSERT_POST = "INSERT INTO posts (user_id, content, author_id, date) VALUES (?, ?, ?, ?);"
 	SQL_SELECT_USER_POSTS = "SELECT posts.*, users.name, users.photo FROM posts INNER JOIN users ON users.id = posts.author_id WHERE user_id = ? ORDER BY date DESC;"
 	SQL_SELECT_POST_BY_ID = "SELECT * FROM posts INNER JOIN users ON users.id = posts.author_id WHERE posts.ID = ?;"
 	SQL_SELECT_FRIENDS_POST = "SELECT * FROM posts WHERE posts.user_id in (?) ORDER BY date DESC;"
-	SQL_UPDATE_USER = "UPDATE users SET name = ?, email = ?, photo= ? WHERE id =?;"
+	SQL_UPDATE_USER = "UPDATE users SET name = ?, email = ?, photo= ?, description=? WHERE id =?;"
 	SQL_UPDATE_PASSWORD = "UPDATE users SET password = ? WHERE id =?;"
 	SQL_SELECT_ALL_USERS = "SELECT * FROM users;"
-	SQL_SELECT_COMMENTS = "SELECT comments.id,comments.post_id, comments.content, comments.author_id, comments.date, users.name, users.photo FROM comments INNER JOIN users ON users.id = comments.author_id WHERE post_id = ?;"
+	SQL_SELECT_COMMENTS = "SELECT comments.*, users.name, users.photo FROM comments INNER JOIN users ON users.id = comments.author_id WHERE post_id = ?;"
 	SQL_INSERT_COMMENT = "INSERT INTO comments (post_id, content, author_id, date) VALUES (?, ?, ?, ?);"
 	SQL_DELETE_POST = "DELETE FROM posts WHERE id=?;"
 	SQL_DELETE_POST_COMMENTS = "DELETE FROM comments WHERE post_id = ?;"
@@ -56,7 +56,7 @@ class ORM
 	end
 
 	def find_users(criteria)
-		sql_request = "SELECT * FROM users WHERE name LIKE '%#{criteria}%' or email = ?;"
+		sql_request = "SELECT * FROM users WHERE name LIKE '%#{criteria}%' or email = ? ORDER BY name;"
 		results = @db.execute sql_request, [criteria]
 		results.map do |row|
 			User.new row
@@ -88,6 +88,14 @@ class ORM
 		user.friends = users
 	end
 
+	def update_user(user)
+		@db.execute SQL_UPDATE_USER, [user.name, user.email, user.photo, user.description, user.id]
+	end
+
+	def update_password(user, password)
+		@db.execute SQL_UPDATE_PASSWORD, [password, user.id]
+	end
+
 	def create_post(user_id, message, author_id )
 		post_date = DateTime.now
 		@db.execute SQL_INSERT_POST, [user_id, message, author_id, post_date.to_s]
@@ -111,11 +119,7 @@ class ORM
 			ids_str += "#{friend.id}, "
 		end
 		ids_str += "#{user.id}"
-		sql_request = "SELECT posts.id, 
-								posts.content, 
-								posts.user_id, 
-								posts.author_id, 
-								posts.date, 
+		sql_request = "SELECT posts.* ,
 								author.name as name,
 								author.photo as photo,
 								user_wall.name as user_name
@@ -131,14 +135,6 @@ class ORM
 			posts << post
 		end
 		posts
-	end
-
-	def update_user(user)
-		@db.execute SQL_UPDATE_USER, [user.name, user.email, user.photo, user.id]
-	end
-
-	def update_password(user, password)
-		@db.execute SQL_UPDATE_PASSWORD, [password, user.id]
 	end
 
 	def get_post_comments(post)

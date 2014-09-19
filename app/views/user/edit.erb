@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title>Social Network</title>
-    <link rel="stylesheet" type="text/css" href="/public/style.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/style.css">
     <link rel="stylesheet" type="text/css" href="/public/css/semantic.css">
 
 </head>
@@ -37,7 +37,7 @@
           <div class="ui vertical menu">
             <div class="header item">
                 <img class="ui avatar floated image" src="/public/images/profil/<%=user.photo%>">
-                <a href="/index"><%=user.name%></a>
+                <a href="/index"><%=user.name%></a><br><br>
             </div>
             <a class=" item" href="/index"><i class="home icon"></i> My wall</a>
             <a class="item" href="/news"><i class="grid layout icon"></i> All news</a>
@@ -91,6 +91,12 @@
                     <label>Photo</label>
                     <div class="ui left labeled icon input">
                       <input type="file" name="photo">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Description / Passion / Interest</label>
+                    <div class="ui left labeled icon input">
+                      <textarea name="description"><%=user.description%></textarea>
                     </div>
                 </div>
                 <div class="field">

@@ -86,7 +86,7 @@ class App
             errors = check_create_user_form(request)
             if errors.empty?
                 user = @orm.create_user(request.POST['name'], request.POST['email'], request.POST['password'])
-                response.session['user_id'] = user.id
+                request.session['user_id'] = user.id
                 response.redirect '/index'
             else
                 response.write render('/user/new', {"errors" =>errors})
@@ -166,10 +166,15 @@ class App
     def update_user(request, user_login)
         user_login.name = request.POST['name']
         user_login.email = request.POST['email']
+        user_login.description = request.POST['description']
 
         # TODO Generate a key as the file name intead of using the user id
         if request.POST["photo"]
             user_login.photo = "photo_#{user_login.id}.jpg"
+            if File.exist?("public/images/profil/#{user_login.photo}")
+                puts "delete file"
+                File.delete("public/images/profil/#{user_login.photo}")
+            end
             File.open("public/images/profil/#{user_login.photo}", 'w+') do |file|
                 file.write(request.POST["photo"][:tempfile].read)
             end

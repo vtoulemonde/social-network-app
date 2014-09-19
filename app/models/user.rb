@@ -1,7 +1,7 @@
 class User
 
 	attr_reader :id
-	attr_accessor :friends, :name, :email, :photo
+	attr_accessor :friends, :name, :email, :photo, :description
 
 	def initialize(hash)
 		@id = hash["id"]
@@ -10,6 +10,7 @@ class User
 		# @password = hash["password"]
 		@friends = []
 		@photo = hash["photo"]
+		@description = hash["description"]
 	end
 
 	def print
