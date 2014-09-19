@@ -46,10 +46,16 @@ class App
             @orm.load_friends(user_login)
             response.write render('friends', {"user"=> user_login})
 
+        when '/user/delete_friend'
+            friend_id = request.GET['id'].to_i
+            @orm.delete_friend(user_login, friend_id)
+            response.redirect '/friends'
+
         when '/user/add_friend'
             friend_id = request.GET['id'].to_i
-            result = user_login.friends.select { |friend| friend.id == friend_id}
-            @orm.add_friend(user_login, friend_id) if (result.count == 0 && friend_id != user_login.id)
+            if !user.is_my_friend?(friend_id) && friend_id != user_login.id
+                @orm.add_friend(user_login, friend_id)
+            end
             response.redirect '/friends'
 
         when '/post/create'
@@ -126,7 +132,7 @@ class App
             @orm.create_comment(request.POST['post_id'], request.POST['message'], user_login.id)
             if request.POST['wall_id']
                 response.redirect "/user/wall?id=#{request.POST['wall_id']}"
-            elsif request.GET['back'] == 'news'
+            elsif request.POST['back'] == 'news'
                 response.redirect '/news'
             else
                 response.redirect '/index'

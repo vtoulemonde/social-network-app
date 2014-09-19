@@ -17,4 +17,9 @@ class User
 		puts "#{@id}, #{@name}, #{@email}"
 	end
 
+	def is_my_friend?(friend_id)
+		result = @friends.select { |friend| friend.id == friend_id}
+		return (result.count != 0)
+	end
+
 end

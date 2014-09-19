@@ -66,11 +66,18 @@
         		<div class="ui divided list">
         			<% users.each do |person| %>
         			<div class="item">
-        				<div class="right floated down button">
-                            <a href="/user/add_friend?id=<%=person.id%>" class="right floated ui down button"><i class="user icon"></i>Add as a friend</a>
-                        </div>
-        				<!-- <img class="ui avatar image" src="/images/demo/avatar2.jpg"> -->
-                        <img class="ui avatar image" src="/public/images/profil/<%=person.photo%>">
+                        <% if user.id != person.id %>
+                            <% if user.is_my_friend?(person.id)%>
+            				<div class="right floated down button">
+                                <a href="/user/delete_friend?id=<%=person.id%>" class="right floated ui down button"><i class="remove icon"></i>Not a friend</a>
+                            </div>
+                            <% else %>
+                            <div class="right floated down button">
+                                <a href="/user/add_friend?id=<%=person.id%>" class="right floated ui down button"><i class="user icon"></i>Add as friend</a>
+                            </div>
+                            <% end %>
+                        <% end %>
+        				<img class="ui avatar image" src="/public/images/profil/<%=person.photo%>">
         				<div class="content">
         					<div class="header"><%=person.name%></div>
         				</div>

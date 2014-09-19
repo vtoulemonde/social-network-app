@@ -75,6 +75,9 @@
                 <% user.friends.each do |friend| %>
                 <div class="item">
                     <div class="image">
+                        <a class="ui right red corner label" href="/user/delete_friend?id=<%=friend.id%>">
+                            <i class="remove icon"></i>
+                        </a>
                         <img src="/public/images/profil/<%=friend.photo%>">
                     </div>
                     <div class="content">

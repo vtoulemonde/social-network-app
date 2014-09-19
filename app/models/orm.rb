@@ -16,11 +16,12 @@ class ORM
 	SQL_SELECT_FRIENDS_POST = "SELECT * FROM posts WHERE posts.user_id in (?) ORDER BY date DESC;"
 	SQL_UPDATE_USER = "UPDATE users SET name = ?, email = ?, photo= ?, description=? WHERE id =?;"
 	SQL_UPDATE_PASSWORD = "UPDATE users SET password = ? WHERE id =?;"
-	SQL_SELECT_ALL_USERS = "SELECT * FROM users;"
+	SQL_SELECT_ALL_USERS = "SELECT * FROM users ORDER BY name;"
 	SQL_SELECT_COMMENTS = "SELECT comments.*, users.name, users.photo FROM comments INNER JOIN users ON users.id = comments.author_id WHERE post_id = ?;"
 	SQL_INSERT_COMMENT = "INSERT INTO comments (post_id, content, author_id, date) VALUES (?, ?, ?, ?);"
 	SQL_DELETE_POST = "DELETE FROM posts WHERE id=?;"
 	SQL_DELETE_POST_COMMENTS = "DELETE FROM comments WHERE post_id = ?;"
+	SQL_DELETE_FRIEND = "DELETE FROM friends WHERE user_id_1=? AND user_id_2=?;"
 
 	def initialize(db_path = "app/data/social.db")
 		@db = SQLite3::Database.new(db_path)
@@ -72,7 +73,11 @@ class ORM
 
 	def add_friend(user, user_id_to_connect)
 		@db.execute SQL_ADD_FRIEND, [user.id, user_id_to_connect, 1]
-		load_friends(user)
+	end
+
+	def delete_friend(user, friend_id)
+		@db.execute SQL_DELETE_FRIEND, [user.id, friend_id]
+		@db.execute SQL_DELETE_FRIEND, [friend_id, user.id]
 	end
 
 	def load_friends(user)
