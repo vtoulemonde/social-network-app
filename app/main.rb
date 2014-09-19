@@ -53,7 +53,7 @@ class App
 
         when '/user/add_friend'
             friend_id = request.GET['id'].to_i
-            if !user.is_my_friend?(friend_id) && friend_id != user_login.id
+            if !user_login.is_my_friend?(friend_id) && friend_id != user_login.id
                 @orm.add_friend(user_login, friend_id)
             end
             response.redirect '/friends'
