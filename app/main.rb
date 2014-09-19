@@ -47,7 +47,9 @@ class App
             response.write render('friends', {"user"=> user_login})
 
         when '/user/add_friend'
-            @orm.add_friend(user_login, request.GET['id'])
+            friend_id = request.GET['id'].to_i
+            result = user_login.friends.select { |friend| friend.id == friend_id}
+            @orm.add_friend(user_login, friend_id) if (result.count == 0 && friend_id != user_login.id)
             response.redirect '/friends'
 
         when '/post/create'
@@ -124,6 +126,8 @@ class App
             @orm.create_comment(request.POST['post_id'], request.POST['message'], user_login.id)
             if request.POST['wall_id']
                 response.redirect "/user/wall?id=#{request.POST['wall_id']}"
+            elsif request.GET['back'] == 'news'
+                response.redirect '/news'
             else
                 response.redirect '/index'
             end
@@ -132,6 +136,8 @@ class App
             @orm.delete_post(request.GET['post_id'])
             if request.GET['wall_id']
                 response.redirect "/user/wall?id=#{request.GET['wall_id']}"
+            elsif request.GET['back'] == 'news'
+                response.redirect '/news'
             else
                 response.redirect '/index'
             end
@@ -172,7 +178,6 @@ class App
         if request.POST["photo"]
             user_login.photo = "photo_#{user_login.id}.jpg"
             if File.exist?("public/images/profil/#{user_login.photo}")
-                puts "delete file"
                 File.delete("public/images/profil/#{user_login.photo}")
             end
             File.open("public/images/profil/#{user_login.photo}", 'w+') do |file|
@@ -223,7 +228,6 @@ class App
         end
         response = Typhoeus.get(url)
         data = JSON.parse response.body
-        # ap data["articles"]
         data["articles"].each do |article|
             article["url"] = article["url"].split("?")[0]
             article["publish_date"] = article["publish_date"].split("+")[0]
