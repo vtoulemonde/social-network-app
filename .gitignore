@@ -1,0 +1,5 @@
+# Ignore profil picture downloaded
+/public/images/profil
+
+# Ignore database
+/app/data/*.db
