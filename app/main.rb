@@ -1,8 +1,9 @@
 require 'rack'
 require 'typhoeus'
 require 'json'
-require 'ap'
-require 'sqlite3'
+# require 'ap'
+# require 'sqlite3'
+require 'pg'
 require 'date'
 require 'erubis'
 require 'fileutils'
@@ -15,6 +16,7 @@ require_relative 'models/comment'
 class App
 
     def initialize()
+        puts "running!"
         @orm = ORM.new()
     end
 
