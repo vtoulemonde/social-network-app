@@ -9,4 +9,4 @@ app = Rack::ShowStatus.new app
 app = Rack::Session::Cookie.new app
 app = Rack::Static.new(app, {:urls => ["/public"]})
 
-Rack::Handler::WEBrick.run app, {port: 9292}
+Rack::Handler::WEBrick.run app, {Port: ENV["PORT"]}
