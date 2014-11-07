@@ -17,7 +17,8 @@ class App
 
     def initialize()
         puts "running!"
-        @orm = ORM.new()
+        db_url = ENV["DATABASE_URL"]
+        @orm = ORM.new(db_url)
     end
 
 	def call(env)

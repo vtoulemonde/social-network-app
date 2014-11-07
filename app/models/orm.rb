@@ -23,9 +23,10 @@ class ORM
 	SQL_DELETE_POST_COMMENTS = "DELETE FROM comments WHERE post_id = $1;"
 	SQL_DELETE_FRIEND = "DELETE FROM friends WHERE user_id_1 = $1 AND user_id_2 = $2;"
 
-	def initialize(db_path = "app/data/social_app")
+	def initialize(db_path)
 		# @db = SQLite3::Database.new(db_path)
-		@db = PG::Connection.open(:dbname => 'social_app')
+		db_path ||= "social_app"
+		@db = PG::Connection.open(:dbname => db_path)
 		# conn = PG::Connection.open(:dbname => 'test')
 		# @db.execute 'PRAGMA foreign_keys = true;'
 		# @db.results_as_hash = true
