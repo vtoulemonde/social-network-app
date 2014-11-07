@@ -16,9 +16,7 @@ require_relative 'models/comment'
 class App
 
     def initialize()
-        puts "running!"
-        db_url = ENV["DATABASE_URL"]
-        @orm = ORM.new(db_url)
+        @orm = ORM.new()
     end
 
 	def call(env)

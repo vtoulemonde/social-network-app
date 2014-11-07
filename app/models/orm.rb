@@ -23,28 +23,19 @@ class ORM
 	SQL_DELETE_POST_COMMENTS = "DELETE FROM comments WHERE post_id = $1;"
 	SQL_DELETE_FRIEND = "DELETE FROM friends WHERE user_id_1 = $1 AND user_id_2 = $2;"
 
-	def initialize(db_path)
-		# @db = SQLite3::Database.new(db_path)
-
-		host = "ec2-54-204-40-96.compute-1.amazonaws.com"
-		database = 	"d2is58idcbajqv"
-		user = 	"jgzslwpdyiorve"
-		port = 	"5432"
-		password = "gw6vfGYQx1gXeYj0f66Nxbt8p5"
-
-		puts "*"*50
-		puts "Starting ORM"
-		# db_path ||= "social_app"
-		# p db_path
-		# puts "\t" + "*"*25
-		# @db = PG::Connection.open(:dbname => db_path)
-		@db = PG::Connection.new(host, port, nil, nil, database, user, password)
-		puts "\n\n"
-		p @db
-		puts "*"*50
-		# conn = PG::Connection.open(:dbname => 'test')
-		# @db.execute 'PRAGMA foreign_keys = true;'
-		# @db.results_as_hash = true
+	def initialize(db_path = "social_app")
+		if ENV["RACK_ENV"] == "production"
+			database_url = ENV["DATABASE_URL"]
+			database_url_array =  database_url.split("://")[1].gsub("/", ":").gsub("@", ":").split(":")
+			user = database_url_array[0]
+			password = database_url_array[1]
+			host = database_url_array[2]
+			port = database_url_array[3]
+			database = database_url_array[4]
+			@db = PG::Connection.new(host, port, nil, nil, database, user, password)
+		else
+			@db = PG::Connection.open(:dbname => db_path)
+		end
 	end
 
 	def user_email_exist?(email)
