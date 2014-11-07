@@ -25,12 +25,20 @@ class ORM
 
 	def initialize(db_path)
 		# @db = SQLite3::Database.new(db_path)
+
+		host = "ec2-54-204-40-96.compute-1.amazonaws.com"
+		database = 	"d2is58idcbajqv"
+		user = 	"jgzslwpdyiorve"
+		port = 	"5432"
+		password = "gw6vfGYQx1gXeYj0f66Nxbt8p5"
+
 		puts "*"*50
 		puts "Starting ORM"
-		db_path ||= "social_app"
-		p db_path
-		puts "\t" + "*"*25
-		@db = PG::Connection.open(:dbname => db_path)
+		# db_path ||= "social_app"
+		# p db_path
+		# puts "\t" + "*"*25
+		# @db = PG::Connection.open(:dbname => db_path)
+		@db = PG::Connection.new(host, port, nil, nil, database, user, password)
 		puts "\n\n"
 		p @db
 		puts "*"*50
