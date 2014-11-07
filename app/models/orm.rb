@@ -25,8 +25,15 @@ class ORM
 
 	def initialize(db_path)
 		# @db = SQLite3::Database.new(db_path)
+		puts "*"*50
+		puts "Starting ORM"
 		db_path ||= "social_app"
+		p db_path
+		puts "\t" + "*"*25
 		@db = PG::Connection.open(:dbname => db_path)
+		puts "\n\n"
+		p @db
+		puts "*"*50
 		# conn = PG::Connection.open(:dbname => 'test')
 		# @db.execute 'PRAGMA foreign_keys = true;'
 		# @db.results_as_hash = true
